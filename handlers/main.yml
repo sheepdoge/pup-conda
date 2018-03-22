@@ -1,0 +1,5 @@
+---
+- name: remove conda installer
+  file:
+    name: "{{ conda_script_path }}"
+    state: absent

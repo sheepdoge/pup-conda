@@ -1,0 +1,17 @@
+---
+
+# We don't create any other environments. We leave that as a per project level
+# task.
+- name: install conda packages into base env
+  shell: |
+    source {{ miniconda_home }}/bin/activate && conda install -y {{ conda_packages | join(' ') }}
+  args:
+    executable: /bin/bash
+
+# Only install as pip package if we don't have conda package available
+- name: install pip packages into base env
+  shell: |
+    source {{ miniconda_home }}/bin/activate && pip install {{ pip_packages | join(' ') }}
+  args:
+    executable: /bin/bash
+

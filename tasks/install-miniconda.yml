@@ -1,0 +1,62 @@
+---
+
+- set_fact:
+    miniconda_url: "{{ miniconda3_linux_url }}"
+  when: use_miniconda_3 and ansible_os_family != 'Darwin'
+
+- set_fact:
+    miniconda_url: "{{ miniconda2_linux_url }}"
+  when: use_miniconda_2 and ansible_os_family != 'Darwin'
+
+- set_fact:
+    miniconda_url: "{{ miniconda3_mac_url }}"
+  when: use_miniconda_3 and ansible_os_family == 'Darwin'
+
+- set_fact:
+    miniconda_url: "{{ miniconda2_mac_url }}"
+  when: use_miniconda_2 and ansible_os_family == 'Darwin'
+
+- name: check if miniconda installed
+  stat:
+    path: "{{ miniconda_home }}/bin/conda"
+  register: conda_exec
+  changed_when: conda_exec.stat.exists == False
+
+- set_fact:
+    conda_installed: "{{ conda_exec.stat.exists }}"
+
+- block:
+  - name: download conda installer
+    get_url:
+      url: "{{ miniconda_url }}"
+      dest: "{{ conda_script_path }}"
+      mode: 0755
+    register: download_installer
+
+  - name: run conda installer
+    shell: |
+      {{ conda_script_path }} -b -p {{ miniconda_home }}
+    args:
+      creates: "{{ miniconda_home }}/bin/conda"
+      executable: /bin/bash
+    when: download_installer | success
+    notify: remove conda installer
+  when: conda_installed == False
+
+- name: ensure miniconda activate in ~/.bashrc
+  lineinfile:
+    dest: "{{ dotfile }}"
+    line: "source {{ miniconda_home }}/bin/activate"
+    insertafter: EOF
+    state: present
+
+- name: ensure condarc in place
+  copy:
+    src: condarc
+    dest: ~/.condarc
+
+- name: ensure conda using the latest version
+  shell: |
+    source {{ miniconda_home }}/bin/activate && conda update -y conda
+  args:
+    executable: /bin/bash

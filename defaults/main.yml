@@ -1,0 +1,8 @@
+---
+
+miniconda3_linux_url: https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+miniconda3_mac_url: https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+miniconda2_linux_url: https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
+miniconda2_mac_url: https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh
+
+conda_script_path: /tmp/miniconda.sh

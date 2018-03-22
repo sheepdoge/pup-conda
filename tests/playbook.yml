@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars_files:
+    - defaults/main.yml
+    - vars/main.yml
+
+  vars:
+    pup_conda_main_conda_packages:
+      - ipython
+      - requests
+      - mypy
+    pup_conda_main_pip_packages:
+      - sheepdoge
+
+  handlers:
+    - import_tasks: handlers/main.yml
+
+  tasks:
+    - include_tasks: tasks/main.yml

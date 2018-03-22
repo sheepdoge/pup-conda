@@ -1,0 +1,10 @@
+---
+conda_packages: "{{ pup_conda_main_conda_packages }}"
+pip_packages: "{{ pup_conda_main_pip_packages }}"
+
+use_miniconda_3: "{{ pup_conda_main_use_miniconda_3 | default(true) }}"
+use_miniconda_2: "{{ pup_conda_main_use_miniconda_2 | default(false) }}"
+
+miniconda_home: "{{ pup_conda_main_miniconda_home | default('~/.miniconda') }}"
+
+dotfile: "{{ pup_conda_main_dotfile | default('~/.bashrc') }}"
