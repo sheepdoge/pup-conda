@@ -12,8 +12,6 @@ RUN apt-get -y install \
 RUN pip install --upgrade pip
 RUN pip install "ansible>=2.0,<3.0"
 
-RUN mkdir /sheepdoge-test
-
 WORKDIR /sheepdoge-test
 
 ADD defaults ./defaults
@@ -23,5 +21,10 @@ ADD tasks ./tasks
 ADD vars ./vars
 ADD tests/* ./
 
-RUN chmod u+x test.sh
-ENTRYPOINT ./test.sh
+RUN groupadd -g 999 pup-test && \
+    useradd --create-home -r -u 999 -g pup-test pup-test
+RUN chown -R pup-test:pup-test .
+
+USER pup-test
+
+CMD ./test.sh
