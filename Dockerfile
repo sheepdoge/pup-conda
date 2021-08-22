@@ -1,12 +1,12 @@
-FROM ubuntu:16.04
+FROM ubuntu:20.04
 
 RUN apt-get update -qq
 RUN apt-get -y install \
   build-essential \
   git \
-  python \
-  python-apt \
-  python-pip \
+  python3 \
+  python3-apt \
+  python3-pip \
   vim
 
 RUN pip install --upgrade pip

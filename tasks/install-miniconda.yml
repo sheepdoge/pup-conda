@@ -39,15 +39,15 @@
     args:
       creates: "{{ miniconda_home }}/bin/conda"
       executable: /bin/bash
-    when: download_installer | success
+    when: download_installer is succeeded
     notify: remove conda installer
   when: conda_installed == False
 
-- name: ensure miniconda activate in ~/.bashrc
+- name: ensure conda in path
   lineinfile:
     dest: "{{ dotfile }}"
-    line: "source {{ miniconda_home }}/bin/activate"
     insertafter: EOF
+    line: "[[ \":$PATH:\" != *\":{{ miniconda_home }}/bin/conda:\"* ]] && PATH=\"{{ miniconda_home }}/bin/conda:$PATH\" || true"
     state: present
 
 - name: ensure condarc in place
@@ -57,6 +57,6 @@
 
 - name: ensure conda using the latest version
   shell: |
-    source {{ miniconda_home }}/bin/activate && conda update -y conda
+    {{ miniconda_home }}/bin/conda update -y conda
   args:
     executable: /bin/bash
