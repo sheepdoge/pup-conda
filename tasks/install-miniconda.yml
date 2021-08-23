@@ -43,20 +43,20 @@
     notify: remove conda installer
   when: conda_installed == False
 
-- name: ensure conda in path
+- name: ensure miniconda activate in ~/.bashrc
   lineinfile:
     dest: "{{ dotfile }}"
+    line: "source {{ miniconda_home }}/bin/activate"
     insertafter: EOF
-    line: "[[ \":$PATH:\" != *\":{{ miniconda_home }}/bin/conda:\"* ]] && PATH=\"{{ miniconda_home }}/bin/conda:$PATH\" || true"
     state: present
-
-- name: ensure condarc in place
-  copy:
-    src: condarc
-    dest: ~/.condarc
 
 - name: ensure conda using the latest version
   shell: |
     {{ miniconda_home }}/bin/conda update -y conda
   args:
     executable: /bin/bash
+
+- name: ensure condarc in place
+  copy:
+    src: condarc
+    dest: ~/.condarc

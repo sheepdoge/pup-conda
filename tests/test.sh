@@ -11,7 +11,7 @@ test::run_ansible() {
 }
 
 test::assert_output() {
-  more ~/.bashrc | grep -q "~/.miniconda/bin/conda"
+  more ~/.bashrc | grep -q "~/.miniconda/bin"
   more ~/.condarc | grep -q "conda-forge"
 }
 
